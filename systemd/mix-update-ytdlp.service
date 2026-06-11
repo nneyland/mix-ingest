@@ -1,0 +1,10 @@
+[Unit]
+Description=mix-ingest — weekly yt-dlp update
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+# Runs as root: the script drops to `media` for the venv upgrade, then restarts the
+# service (which needs root). See scripts/update-ytdlp.sh.
+ExecStart=/opt/mix/scripts/update-ytdlp.sh

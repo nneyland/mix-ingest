@@ -1,0 +1,34 @@
+# mix-ingest — example compose file (Unraid-flavored paths; adjust to taste).
+services:
+  mix-ingest:
+    image: ghcr.io/nneyland/mix-ingest:latest
+    container_name: mix-ingest
+    ports:
+      - "8080:8080"
+    environment:
+      # Where mixes are filed / scratch space. Defaults shown; keep both on the
+      # same mounted volume so the final move is atomic.
+      LIBRARY_ROOT: /data/media/mixes
+      WORK_DIR: /data/inbox/.mixtmp
+
+      # Subsonic API — triggers a library rescan after each ingest (optional).
+      NAVIDROME_URL: http://navidrome:4533
+      NAVIDROME_USER: ""
+      NAVIDROME_PASS: ""
+
+      # Ownership of filed output. Unraid: 99/100 (nobody/users).
+      OWNER_UID: "99"
+      OWNER_GID: "100"
+
+      # Optional extras — uncomment as needed:
+      # SOUNDCLOUD_OAUTH: ""                          # Go+ → 256 kbps AAC
+      # YOUTUBE_COOKIES: /config/youtube-cookies.txt  # YouTube bot-wall workaround
+      # FLARESOLVERR_URL: http://flaresolverr:8191    # offload 1001tl fetching
+      # INGEST_SHARED_SECRET: ""                      # require X-Ingest-Secret header
+    volumes:
+      - /mnt/user/data:/data                       # your music share
+      # - /mnt/user/appdata/mix-ingest:/config     # cookies.txt etc. (optional)
+    # Required for the built-in Chromium (1001tracklists fetcher) — it crashes
+    # on Docker's default 64 MB /dev/shm. Not needed if you use FlareSolverr.
+    shm_size: 1g
+    restart: unless-stopped

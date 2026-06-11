@@ -1,0 +1,27 @@
+[project]
+name = "mix-ingest"
+version = "0.1.0"
+description = "Self-hosted DJ-mix ingestion: download, tracklist as synced lyrics, tag, file, Navidrome rescan"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "yt-dlp>=2024.1.0",
+    "mutagen>=1.47",
+    "httpx>=0.27",
+    "python-dotenv>=1.0",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "python-multipart>=0.0.9",
+    "playwright>=1.60.0",
+    "pyvirtualdisplay>=3.0",
+]
+
+[project.scripts]
+mix-ingest = "mixingest.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["mixingest", "app"]

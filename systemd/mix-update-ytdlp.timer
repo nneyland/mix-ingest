@@ -1,0 +1,10 @@
+[Unit]
+Description=Weekly yt-dlp update for mix-ingest
+
+[Timer]
+# Sunday 04:30; Persistent catches up if the box was off at the scheduled time.
+OnCalendar=Sun 04:30
+Persistent=true
+
+[Install]
+WantedBy=timers.target

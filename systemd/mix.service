@@ -1,0 +1,26 @@
+[Unit]
+Description=mix-ingest — DJ-mix ingestion service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=media
+Group=media
+WorkingDirectory=/opt/mix
+EnvironmentFile=/opt/mix/.env
+# Shared Playwright browser location so the `media` user finds Chromium (installed
+# with: sudo PLAYWRIGHT_BROWSERS_PATH=/opt/mix/.ms-playwright \
+#   uv run playwright install --with-deps chromium). Also needs: apt install xvfb xauth.
+Environment=PLAYWRIGHT_BROWSERS_PATH=/opt/mix/.ms-playwright
+# Uses the project venv created by `uv venv /opt/mix/.venv && uv sync`.
+ExecStart=/opt/mix/.venv/bin/uvicorn app.main:app --host ${BIND_HOST} --port ${BIND_PORT}
+Restart=on-failure
+RestartSec=5
+# Hardening (kept loose — needs rw access to the /data bind mount).
+NoNewPrivileges=true
+ProtectSystem=full
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

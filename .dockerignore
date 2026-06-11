@@ -1,0 +1,13 @@
+.git
+.venv
+.ms-playwright
+.env
+*cookies*.txt
+__pycache__
+*.py[cod]
+.claude
+systemd/
+unraid/
+scripts/
+*.md
+!README.md
